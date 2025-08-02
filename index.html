@@ -14,6 +14,7 @@
       --btn-text: #202124;
       --accent: #4285f4;
       --operator: #fbbc04;
+      --error: #ea4335;
     }
 
     * {
@@ -100,6 +101,11 @@
       grid-column: span 2;
     }
 
+    .danger {
+      background: var(--error);
+      color: white;
+    }
+
     @media (max-width: 500px) {
       #display {
         font-size: 1.5rem;
@@ -115,9 +121,11 @@
 <body>
   <h1>Kkalculator</h1>
   <button id="modeToggle">Switch to Scientific</button>
+
   <div class="calculator">
     <input type="text" id="display" placeholder="0" autofocus />
-    
+
+    <!-- Basic Buttons -->
     <div class="buttons basic">
       <button onclick="append('7')">7</button>
       <button onclick="append('8')">8</button>
@@ -140,6 +148,7 @@
       <button class="operator" onclick="append('+')">+</button>
     </div>
 
+    <!-- Scientific Buttons -->
     <div class="buttons sci">
       <button onclick="append('Math.sin(')">sin</button>
       <button onclick="append('Math.cos(')">cos</button>
@@ -152,9 +161,10 @@
       <button onclick="append('Math.E')">e</button>
     </div>
 
+    <!-- Utility Buttons -->
     <div class="buttons">
       <button onclick="backspace()">⌫</button>
-      <button class="wide" onclick="clearDisplay()">Clear</button>
+      <button class="wide danger" onclick="clearDisplay()">Clear</button>
       <button onclick="append('(')">(</button>
       <button onclick="append(')')">)</button>
     </div>
@@ -166,8 +176,8 @@
     const toggleBtn = document.getElementById('modeToggle');
     let scientific = false;
 
-    function append(value) {
-      display.value += value;
+    function append(val) {
+      display.value += val;
       display.focus();
     }
 
@@ -182,27 +192,38 @@
 
     function clearDisplay() {
       display.value = '';
+      display.focus();
     }
 
     function backspace() {
       display.value = display.value.slice(0, -1);
+      display.focus();
     }
 
     toggleBtn.onclick = () => {
       scientific = !scientific;
       sciButtons.style.display = scientific ? 'grid' : 'none';
       toggleBtn.textContent = scientific ? 'Switch to Basic' : 'Switch to Scientific';
+      display.focus();
     };
 
+    // Enable keyboard input
     display.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
         calculate();
       } else if (e.key === 'Escape') {
+        e.preventDefault();
         clearDisplay();
+      } else if (e.key === 'Backspace') {
+        // Let it default
+      } else if (!/[\d+\-*/().^eπ]/i.test(e.key)) {
+        // block weird input
+        e.preventDefault();
       }
     });
 
+    // PWA service worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js')
         .then(() => console.log('Service Worker Registered'))
