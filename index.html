@@ -1,75 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF‑8">
-  <meta name="viewport" content="width=device‑width,initial‑scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kkalculator</title>
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="manifest.json" />
   <style>
     :root {
-      --bg: white;
-      --display-bg: #f5f5f5;
-      --btn-bg: white;
-      --btn-hover: #e8e8e8;
-      --btn-text: #000;
+      --bg: #ffffff;
+      --btn: #f1f3f4;
+      --btn-hover: #e0e0e0;
+      --text: #202124;
       --accent: #1a73e8;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       background: var(--bg);
+      color: var(--text);
       font-family: 'Roboto', sans-serif;
       display: flex;
       justify-content: center;
-      padding: 20px;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
     }
+
     .calculator {
       width: 100%;
       max-width: 360px;
-      border-radius: 12px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
     }
+
     #display {
       width: 100%;
-      font-size: 2.5rem;
       padding: 20px;
-      background: var(--display-bg);
+      font-size: 2.5rem;
       border: none;
+      background: #f8f9fa;
       text-align: right;
+      color: var(--text);
       outline: none;
     }
+
     .buttons {
-      background: #ddd;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
+      gap: 8px;
+      padding: 16px;
+      background: var(--bg);
     }
+
     .buttons button {
-      background: var(--btn-bg);
-      font-size: 1.5rem;
       padding: 20px;
+      font-size: 1.5rem;
       border: none;
-      cursor: pointer;
-      color: var(--btn-text);
+      background: var(--btn);
       border-radius: 50%;
-      transition: background 0.1s;
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.2s;
     }
+
     .buttons button:hover {
       background: var(--btn-hover);
     }
-    .operator { color: var(--accent); }
-    .wide { grid-column: span 2; border-radius: 24px !important; }
-    .sci { display: none; }
+
+    .operator {
+      color: var(--accent);
+    }
+
+    .wide {
+      grid-column: span 2;
+      border-radius: 24px;
+    }
+
     @media (max-width: 480px) {
-      #display { font-size: 2rem; padding: 16px; }
-      .buttons button { font-size: 1.3rem; padding: 16px; }
+      #display {
+        font-size: 2rem;
+        padding: 16px;
+      }
+      .buttons button {
+        font-size: 1.2rem;
+        padding: 16px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="calculator">
-    <input id="display" type="text" placeholder="0" autofocus>
-    <div class="buttons basic">
+    <input id="display" type="text" placeholder="0" autofocus />
+
+    <div class="buttons">
       <button onclick="append('7')">7</button>
       <button onclick="append('8')">8</button>
       <button onclick="append('9')">9</button>
@@ -85,42 +115,62 @@
       <button onclick="append('3')">3</button>
       <button class="operator" onclick="append('*')">×</button>
 
-      <button onclick="append('0')" class="wide">0</button>
+      <button class="wide" onclick="append('0')">0</button>
       <button onclick="append('.')">.</button>
       <button class="operator" onclick="append('+')">+</button>
 
       <button onclick="append('(')">(</button>
       <button onclick="append(')')">)</button>
-      <button onclick="calculate()" class="operator">=</button>
-      <button onclick="clearDisplay()" class="operator">C</button>
-    </div>
-    <div class="buttons sci">
-      <button onclick="append('Math.sin(')">sin</button>
-      <button onclick="append('Math.cos(')">cos</button>
-      <button onclick="append('Math.tan(')">tan</button>
-      <button onclick="append('Math.sqrt(')">√</button>
-      <button onclick="append('Math.log(')">ln</button>
-      <button onclick="append('Math.pow(')">^</button>
-      <button onclick="append('Math.PI')">π</button>
-      <button onclick="append('Math.E')">e</button>
+      <button class="operator" onclick="calculate()">=</button>
+      <button class="operator" onclick="clearDisplay()">C</button>
     </div>
   </div>
+
   <script>
     const display = document.getElementById('display');
-    const sci = document.querySelector('.sci');
-    let scientific = false;
-    function append(v){ display.value += v; display.focus(); }
-    function backspace(){ display.value = display.value.slice(0,-1); display.focus(); }
-    function clearDisplay(){ display.value=''; display.focus(); }
-    function calculate(){
-      try{ display.value = Function('"use strict";return('+display.value+')')(); }
-      catch { display.value = 'Error'; }
+
+    function append(val) {
+      display.value += val;
+      display.focus();
     }
-    display.addEventListener('keydown', e=>{
-      if(e.key==='Enter'){ e.preventDefault(); calculate(); }
-      else if(e.key==='Escape'){ e.preventDefault(); clearDisplay(); }
-      else if(!/[\d+\-*/().^eπ]/i.test(e.key)&& e.key!=='Backspace') e.preventDefault();
+
+    function backspace() {
+      display.value = display.value.slice(0, -1);
+      display.focus();
+    }
+
+    function clearDisplay() {
+      display.value = '';
+      display.focus();
+    }
+
+    function calculate() {
+      try {
+        display.value = Function('"use strict"; return (' + display.value + ')')();
+      } catch {
+        display.value = 'Error';
+      }
+      display.focus();
+    }
+
+    display.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        calculate();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        clearDisplay();
+      } else if (!/[\d+\-*/().^eπ]/i.test(e.key) && e.key !== 'Backspace') {
+        e.preventDefault();
+      }
     });
+
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('Service Worker registered.'))
+        .catch(err => console.error('Service Worker registration failed:', err));
+    }
   </script>
 </body>
 </html>
