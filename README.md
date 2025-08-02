@@ -2,7 +2,7 @@
 
 Kkalculator is a compact and modern web-based calculator with **Basic** and **Scientific** modes. It's a fully responsive **Progressive Web App (PWA)** that you can install on any device and use offline.
 
-Try it here [Kkalculator](https://Darky-Github.github.io/Kkalculator/)
+Try it here [Kkalculator](https://Darky-Github.github.io/Kkalculator-Calculator)
 
 ---
 
