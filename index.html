@@ -97,7 +97,7 @@
 </head>
 <body>
   <div class="calculator">
-    <input id="display" type="text" placeholder="0" autofocus />
+    <div id="display" contenteditable="false" tabindex="0">0</div>
 
     <div class="buttons">
       <button onclick="append('7')">7</button>
@@ -126,51 +126,63 @@
     </div>
   </div>
 
-  <script>
-    const display = document.getElementById('display');
+<script>
+  const display = document.getElementById('display');
 
-    function append(val) {
-      display.value += val;
-      display.focus();
+  function append(val) {
+    if (display.innerText === '0' || display.innerText === 'Error') {
+      display.innerText = val;
+    } else {
+      display.innerText += val;
     }
+  }
 
-    function backspace() {
-      display.value = display.value.slice(0, -1);
-      display.focus();
+  function backspace() {
+    display.innerText = display.innerText.slice(0, -1) || '0';
+  }
+
+  function clearDisplay() {
+    display.innerText = '0';
+  }
+
+  function calculate() {
+    try {
+      display.innerText = Function('"use strict"; return (' + display.innerText + ')')();
+    } catch {
+      display.innerText = 'Error';
     }
+  }
 
-    function clearDisplay() {
-      display.value = '';
-      display.focus();
+  // Only allow keyboard input when clicked
+  display.addEventListener('click', () => {
+    display.contentEditable = true;
+    display.focus();
+  });
+
+  display.addEventListener('blur', () => {
+    display.contentEditable = false;
+  });
+
+  // Optional: Handle Enter and Backspace keys etc.
+  display.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      calculate();
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      clearDisplay();
+    } else if (e.key === 'Backspace') {
+      // allow native backspace
+    } else if (!/[\d+\-*/().^eπ]/i.test(e.key)) {
+      e.preventDefault();
     }
-
-    function calculate() {
-      try {
-        display.value = Function('"use strict"; return (' + display.value + ')')();
-      } catch {
-        display.value = 'Error';
-      }
-      display.focus();
-    }
-
-    display.addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        calculate();
-      } else if (e.key === 'Escape') {
-        e.preventDefault();
-        clearDisplay();
-      } else if (!/[\d+\-*/().^eπ]/i.test(e.key) && e.key !== 'Backspace') {
-        e.preventDefault();
-      }
-    });
-
-    // Register Service Worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .then(() => console.log('Service Worker registered.'))
-        .catch(err => console.error('Service Worker registration failed:', err));
-    }
-  </script>
+  });
+  // Register Service Worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+    .then(() => console.log('Service Worker registered.'))
+    .catch(err => console.error('Service Worker registration failed:', err));
+  }
+</script>
 </body>
 </html>
