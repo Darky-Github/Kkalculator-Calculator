@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kkalculator</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    #modeToggle {
+      margin-bottom: 10px;
+      padding: 5px 10px;
+      background: #333;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    .calculator {
+      background: #222;
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 320px;
+      width: 100%;
+    }
+
+    #display {
+      width: 100%;
+      padding: 10px;
+      font-size: 24px;
+      margin-bottom: 10px;
+      text-align: right;
+      background: #000;
+      color: #0f0;
+      border: none;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .buttons button {
+      padding: 15px;
+      font-size: 18px;
+      border: none;
+      background: #444;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .buttons button:hover {
+      background: #555;
+    }
+
+    .sci {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Kkalculator</h1>
+  <button id="modeToggle">Switch to Scientific</button>
+  <div class="calculator">
+    <input type="text" id="display" readonly />
+    <div class="buttons basic">
+      <button onclick="append('7')">7</button>
+      <button onclick="append('8')">8</button>
+      <button onclick="append('9')">9</button>
+      <button onclick="append('/')">/</button>
+
+      <button onclick="append('4')">4</button>
+      <button onclick="append('5')">5</button>
+      <button onclick="append('6')">6</button>
+      <button onclick="append('*')">*</button>
+
+      <button onclick="append('1')">1</button>
+      <button onclick="append('2')">2</button>
+      <button onclick="append('3')">3</button>
+      <button onclick="append('-')">-</button>
+
+      <button onclick="append('0')">0</button>
+      <button onclick="append('.')">.</button>
+      <button onclick="calculate()">=</button>
+      <button onclick="append('+')">+</button>
+    </div>
+
+    <div class="buttons sci">
+      <button onclick="append('Math.sin(')">sin</button>
+      <button onclick="append('Math.cos(')">cos</button>
+      <button onclick="append('Math.tan(')">tan</button>
+      <button onclick="append('Math.sqrt(')">√</button>
+
+      <button onclick="append('Math.log(')">ln</button>
+      <button onclick="append('Math.pow(')">^</button>
+      <button onclick="append('Math.PI')">π</button>
+      <button onclick="append('Math.E')">e</button>
+    </div>
+
+    <button style="margin-top:10px; width:100%;" onclick="clearDisplay()">Clear</button>
+  </div>
+
+  <script>
+    const display = document.getElementById('display');
+    const sciButtons = document.querySelector('.sci');
+    const toggleBtn = document.getElementById('modeToggle');
+    let scientific = false;
+
+    function append(value) {
+      display.value += value;
+    }
+
+    function calculate() {
+      try {
+        display.value = eval(display.value);
+      } catch {
+        display.value = 'Error';
+      }
+    }
+
+    function clearDisplay() {
+      display.value = '';
+    }
+
+    toggleBtn.onclick = () => {
+      scientific = !scientific;
+      sciButtons.style.display = scientific ? 'grid' : 'none';
+      toggleBtn.textContent = scientific ? 'Switch to Basic' : 'Switch to Scientific';
+    };
+
+    // PWA Service Worker registration
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('Service Worker Registered'))
+        .catch(err => console.error('SW registration failed:', err));
+    }
+  </script>
+</body>
+</html>
