@@ -1,6 +1,6 @@
 # Kkalculator
 
-Kkalculator is a compact and modern web-based calculator with **Basic** and **Scientific** modes. It's a fully responsive **Progressive Web App (PWA)** that you can install on any device and use offline.
+Kkalculator is a compact and modern web-based calculator. It's a fully responsive **Progressive Web App (PWA)** that you can install on any device and use offline.
 
 Try it here [Kkalculator](https://Darky-Github.github.io/Kkalculator-Calculator)
 
@@ -8,8 +8,7 @@ Try it here [Kkalculator](https://Darky-Github.github.io/Kkalculator-Calculator)
 
 ## Features
 
-- Basic Mode: +, −, ×, ÷, decimal
-- Scientific Mode: sin, cos, tan, log, ln, √, π, e, powers
+- Operations: +, −, ×, ÷, decimal
 - Toggle between modes easily
 - Mobile-first design
 - Offline support via Service Worker
@@ -22,7 +21,7 @@ Try it here [Kkalculator](https://Darky-Github.github.io/Kkalculator-Calculator)
 You can **install it as a PWA** on supported browsers:
 
 1. Open the [kkalculator](https://darky-github.github.io/kkalculator-calculator) link.
-2. Click the **install** icon in the address bar or browser menu.
+2. Click the **install** icon in the address bar or browser menu. (May sometimes differ)
 3. Use it just like a native app — even offline!
 
 ---
@@ -40,8 +39,7 @@ You can **install it as a PWA** on supported browsers:
 ## Notes
 
 - Works best in Chrome, Edge, and Firefox with PWA support.
-- Must be served over HTTPS (GitHub Pages does this by default).
-- If testing locally, use a local server like `http-server` or `live-server`.
+- Must be served over HTTPS.
 
 ---
 
@@ -51,4 +49,4 @@ MIT
 
 ---
 
-Made with ❤️ by Darky-Github
+Made with love by Darky-Github
